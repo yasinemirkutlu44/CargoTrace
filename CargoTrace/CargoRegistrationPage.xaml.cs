@@ -16,6 +16,8 @@ using FireSharp.Response;
 using FireSharp.Interfaces;
 using System.Globalization;
 using System.Device.Location;
+using System.Net;
+using System.Net.Mail;
 
 namespace CargoTrace
 {
@@ -63,6 +65,7 @@ namespace CargoTrace
                     };
                     SetResponse setResponse = firebaseClient.Set("Cargo" + "/" + txtRFIDNumber.Text, cargo);
                     MessageBox.Show("You have registered a new cargo into registration system", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    sendEmail(cargo);
                 }
             }
             catch (FormatException)
@@ -87,6 +90,35 @@ namespace CargoTrace
                     txtLongitude.Text = location.Longitude.ToString().Replace(",", ".");
                 }
             }
+        }
+
+        private void sendEmail(Cargo cargo)
+        {
+            var fromAddress = new MailAddress("kargotakipkou@gmail.com", "From Name");
+            var toAddress = new MailAddress(cargo.OwnerEmail, "To Name");
+            string fromPassword = "KargoTakip1234";
+            string subject = "Kargo Takip Numaranız";
+            string body = "Kargo Takip Numaranız " + cargo.CargoRFIDNumber + "\n Bizi tercih ettiğiniz için teşekkür ederiz.";
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body
+            })
+            {
+                smtp.Send(message);
+            }
+
         }
 
         private void btnCurrentLocation_Click(object sender, RoutedEventArgs e)
