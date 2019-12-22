@@ -45,7 +45,15 @@ namespace CargoTrace
                         UserLoginAuthID = txtLoginAuth.Text,
                         Password = txtPass.Password,
                     };
-                    cargoRegistrationPage.ShowDialog();
+                    if(Handler.IsEqual(responseUser,currentUser))
+                    {
+                        MessageBox.Show("Welcome, You have directed to Cargo Registration Page", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        cargoRegistrationPage.ShowDialog();
+                    }
+                    else
+                    {
+                        Handler.ShowMessage();
+                    }
                 }
             }
             catch
