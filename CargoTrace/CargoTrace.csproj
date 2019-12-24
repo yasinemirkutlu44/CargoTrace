@@ -83,6 +83,7 @@
       <DependentUpon>CargoRegistrationPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Handler.cs" />
+    <Compile Include="LatLong.cs" />
     <Compile Include="User.cs" />
     <Page Include="CargoRegistrationPage.xaml">
       <SubType>Designer</SubType>

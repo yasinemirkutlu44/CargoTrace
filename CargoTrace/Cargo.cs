@@ -10,9 +10,7 @@ namespace CargoTrace
     {
         public string OwnerName { get; set; }
         public string OwnerSurname { get; set; }
-        public string CargoRFIDNumber { get; set; }
         public string OwnerEmail { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public string ReaderID { get; set; }
     }
 }

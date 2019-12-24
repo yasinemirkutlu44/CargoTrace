@@ -24,6 +24,7 @@ namespace CargoTrace
     public partial class CargoRegistrationPage : Window
     {
         private GeoCoordinateWatcher Watcher = null;
+        public static string ReaderIDstatic = "TR4GB6PUP";
         public CargoRegistrationPage()
         {
             InitializeComponent();
@@ -59,11 +60,16 @@ namespace CargoTrace
                         OwnerName = txtOwnerName.Text,
                         OwnerSurname = txtOwnerSurname.Text,
                         OwnerEmail = txtOwnerEmail.Text,
-                        Latitude = double.Parse(txtLatitude.Text.Trim(), CultureInfo.InvariantCulture.NumberFormat),
-                        Longitude = double.Parse(txtLongitude.Text.Trim(), CultureInfo.InvariantCulture.NumberFormat),
-                        CargoRFIDNumber = txtRFIDNumber.Text
+                        ReaderID = ReaderIDstatic
                     };
-                    SetResponse setResponse = firebaseClient.Set("Cargo" + "/" + txtRFIDNumber.Text, cargo);
+                    LatLong latLong = new LatLong()
+                    {
+                        Lat = double.Parse(txtLatitude.Text.Trim(), CultureInfo.InvariantCulture.NumberFormat),
+                        Lon = double.Parse(txtLongitude.Text.Trim(), CultureInfo.InvariantCulture.NumberFormat),
+                    };
+
+                    SetResponse setResponse = firebaseClient.Set("READERS" + "/" + ReaderIDstatic, latLong);
+                    SetResponse setResponse2 = firebaseClient.Set("CARGOS" + "/" + txtRFIDNumber.Text, cargo);
                     MessageBox.Show("You have registered a new cargo into registration system", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                     sendEmail(cargo);
                 }
@@ -98,7 +104,7 @@ namespace CargoTrace
             var toAddress = new MailAddress(cargo.OwnerEmail, "To Name");
             string fromPassword = "KargoTakip1234";
             string subject = "Kargo Takip Numaranız";
-            string body = "Kargo Takip Numaranız " + cargo.CargoRFIDNumber + "\n Bizi tercih ettiğiniz için teşekkür ederiz.";
+            string body = "Kargo Takip Numaranız " + txtRFIDNumber.Text + "\n Bizi tercih ettiğiniz için teşekkür ederiz.";
 
             var smtp = new SmtpClient
             {
